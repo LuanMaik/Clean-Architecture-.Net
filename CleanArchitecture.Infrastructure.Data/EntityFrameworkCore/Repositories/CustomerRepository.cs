@@ -1,4 +1,4 @@
-﻿using CleanArchitecture.Application.Interfaces.Repositories;
+﻿using CleanArchitecture.Application.Repositories;
 using CleanArchitecture.Domain.Entities;
 using CleanArchitecture.Domain.ValueObjects;
 

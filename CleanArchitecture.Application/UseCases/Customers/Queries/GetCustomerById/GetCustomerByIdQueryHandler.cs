@@ -1,13 +1,14 @@
 ﻿using CleanArchitecture.Application.Bus.Commands;
-using CleanArchitecture.Application.Interfaces.Repositories;
+using CleanArchitecture.Application.Repositories;
 using CleanArchitecture.Domain.Entities;
 
 namespace CleanArchitecture.Application.UseCases.Customers.Queries.GetCustomerById;
 
 public class GetCustomerByIdQueryHandler : ICommandHandler<GetCustomerByIdQuery, CommandResult<Customer>>
 {
-    private ICustomerRepository _customerRepository;
-    private GetCustomerByIdQueryValidator _validator;
+    private readonly ICustomerRepository _customerRepository;
+    
+    private readonly GetCustomerByIdQueryValidator _validator;
 
     public GetCustomerByIdQueryHandler(ICustomerRepository customerRepository, GetCustomerByIdQueryValidator validator)
     {

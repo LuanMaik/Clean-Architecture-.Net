@@ -1,6 +1,6 @@
 ﻿using CleanArchitecture.Domain.Entities;
 
-namespace CleanArchitecture.Application.Interfaces.Repositories;
+namespace CleanArchitecture.Application.Repositories;
 
 public interface ICustomerRepository
 {

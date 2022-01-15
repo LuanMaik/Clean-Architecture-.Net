@@ -1,14 +1,14 @@
 ﻿using CleanArchitecture.Application.Bus.Commands;
-using CleanArchitecture.Application.Interfaces.Repositories;
+using CleanArchitecture.Application.Repositories;
 using CleanArchitecture.Domain.Entities;
 
 namespace CleanArchitecture.Application.UseCases.Customers.Commands.InactivateCustomer;
 
 public class InactivateCustomerCommandHandler: ICommandHandler<InactivateCustomerCommand, CommandResult<Customer>>
 {
-    private ICustomerRepository _customerRepository;
+    private readonly ICustomerRepository _customerRepository;
     
-    private InactivateCustomerCommandValidator _validator;
+    private readonly InactivateCustomerCommandValidator _validator;
 
     public InactivateCustomerCommandHandler(ICustomerRepository customerRepository, InactivateCustomerCommandValidator validator)
     {

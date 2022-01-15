@@ -18,17 +18,6 @@ public static class DependencyInjection
         // Add FluentValidation validators registrations
         services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
         
-        // AssemblyScanner
-        //     .FindValidatorsInAssembly(typeof(DependencyInjection).Assembly, true)
-        //     .ForEach(scanResult =>
-        //     {
-        //         services.Add(
-        //             new ServiceDescriptor(
-        //                 serviceType: scanResult.ValidatorType,
-        //                 implementationType: scanResult.ValidatorType,
-        //                 lifetime: ServiceLifetime.Transient));
-        //     });
-        
         return services;
     }
 }

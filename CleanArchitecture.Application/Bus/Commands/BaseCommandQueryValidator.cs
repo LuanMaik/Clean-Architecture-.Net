@@ -1,5 +1,4 @@
-﻿using CleanArchitecture.Application.Interfaces.CommandQuery;
-using FluentValidation;
+﻿using FluentValidation;
 using FluentValidation.Results;
 
 namespace CleanArchitecture.Application.Bus.Commands;
