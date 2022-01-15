@@ -6,8 +6,9 @@ namespace CleanArchitecture.Application.UseCases.Customers.Commands.CreateCustom
 
 public class CreateCustomerCommandHandler: ICommandHandler<CreateCustomerCommand, CommandResult<Customer>>
 {
-    private ICustomerRepository _customerRepository;
-    private CreateCustomerCommandValidator _validator;
+    private readonly ICustomerRepository _customerRepository;
+    
+    private readonly CreateCustomerCommandValidator _validator;
 
     public CreateCustomerCommandHandler(ICustomerRepository customerRepository, CreateCustomerCommandValidator validator)
     {

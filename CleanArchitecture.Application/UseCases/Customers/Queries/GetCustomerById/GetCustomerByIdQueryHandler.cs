@@ -6,8 +6,9 @@ namespace CleanArchitecture.Application.UseCases.Customers.Queries.GetCustomerBy
 
 public class GetCustomerByIdQueryHandler : ICommandHandler<GetCustomerByIdQuery, CommandResult<Customer>>
 {
-    private ICustomerRepository _customerRepository;
-    private GetCustomerByIdQueryValidator _validator;
+    private readonly ICustomerRepository _customerRepository;
+    
+    private readonly GetCustomerByIdQueryValidator _validator;
 
     public GetCustomerByIdQueryHandler(ICustomerRepository customerRepository, GetCustomerByIdQueryValidator validator)
     {

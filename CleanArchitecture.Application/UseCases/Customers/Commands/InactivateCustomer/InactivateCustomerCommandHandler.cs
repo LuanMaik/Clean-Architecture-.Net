@@ -6,9 +6,9 @@ namespace CleanArchitecture.Application.UseCases.Customers.Commands.InactivateCu
 
 public class InactivateCustomerCommandHandler: ICommandHandler<InactivateCustomerCommand, CommandResult<Customer>>
 {
-    private ICustomerRepository _customerRepository;
+    private readonly ICustomerRepository _customerRepository;
     
-    private InactivateCustomerCommandValidator _validator;
+    private readonly InactivateCustomerCommandValidator _validator;
 
     public InactivateCustomerCommandHandler(ICustomerRepository customerRepository, InactivateCustomerCommandValidator validator)
     {
