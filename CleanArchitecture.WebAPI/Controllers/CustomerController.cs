@@ -65,7 +65,7 @@ public class CustomerController : ApiController
     {
         try
         {
-            CommandResult<Customer?> result = await _busService.SendCommand(new GetCustomerByIdQuery(id));
+            CommandResult result = await _busService.SendCommand(new GetCustomerByIdQuery(id));
             
             return result.IsSuccess 
                 ? SuccessResponse(result.Data()) 
@@ -97,7 +97,7 @@ public class CustomerController : ApiController
     {
         try
         {
-            CommandResult<bool> result = await _busService.SendCommand(new InactivateCustomerCommand(id));
+            CommandResult result = await _busService.SendCommand(new InactivateCustomerCommand(id));
             return result.IsSuccess 
                 ? SuccessResponse(result.Data()) 
                 : ValidationErrorResponse(result.Errors);

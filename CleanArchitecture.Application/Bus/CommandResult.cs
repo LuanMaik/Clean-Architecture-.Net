@@ -5,6 +5,10 @@ public class CommandResult<T> {
         _data = data;
         IsSuccess = true;
     }
+    private CommandResult() {
+        _data = default(T);
+        IsSuccess = true;
+    }
 
     public bool IsSuccess { get; private set; }
     public IList<string> Errors { get; private set; } = new List<string>();
@@ -34,9 +38,9 @@ public class CommandResult<T> {
         return result;
     }
 
-    static internal CommandResult<T> Fail(T entity, IList<string> errors) 
+    static internal CommandResult<T> Fail(IList<string> errors) 
     {
-        var result = new CommandResult<T>(entity);
+        var result = new CommandResult<T>();
         result.AddErrors(errors);
         return result;
     }

@@ -5,7 +5,7 @@ using ValidationException = CleanArchitecture.Application.Exceptions.ValidationE
 
 namespace CleanArchitecture.Application.Bus.Behaviors;
 
-public class RequestValidationBehavior<TRequest, TResponse> : MediatR.IPipelineBehavior<TRequest, TResponse> where TRequest : Interfaces.IRequest<TResponse>
+public class RequestValidationBehavior<TRequest, TResponse> : MediatR.IPipelineBehavior<TRequest, TResponse> where TRequest : Interfaces.IRequest<TResponse> where TResponse : CommandResult
 {
     private readonly ICommandQueryValidator<TRequest> _validator;
 
@@ -28,12 +28,13 @@ public class RequestValidationBehavior<TRequest, TResponse> : MediatR.IPipelineB
 
     public Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
     {
-        if (_validator.IsValid(request) == false)
-            return CommandResult<TResponse>.Fail(null, _validator.GetErrorsMessages());
+        return _validator.IsValid(request) ? next() : Errors(_validator.GetErrorsMessages());
+    }
 
+    private static Task<TResponse> Errors(IList<string> errors)
+    {
+        var response = CommandResult.Fail(errors);
 
-        //throw new ValidationException(_validator.GetErrorsMessages());
-
-        return next();
+        return Task.FromResult(response as TResponse);
     }
 }

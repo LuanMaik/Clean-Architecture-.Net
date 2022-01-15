@@ -5,7 +5,7 @@ using CleanArchitecture.Domain.Entities;
 
 namespace CleanArchitecture.Application.UseCases.Customers.Commands.CreateCustomer;
 
-public class CreateCustomerCommandHandler: ICommandHandler<CreateCustomerCommand, CommandResult<Customer?>>
+public class CreateCustomerCommandHandler: ICommandHandler<CreateCustomerCommand, CommandResult>
 {
     private ICustomerRepository _customerRepository;
 
@@ -14,7 +14,7 @@ public class CreateCustomerCommandHandler: ICommandHandler<CreateCustomerCommand
         _customerRepository = customerRepository;
     }
 
-    public async Task<CommandResult<Customer?>> Handle(CreateCustomerCommand request, CancellationToken cancellationToken)
+    public async Task<CommandResult> Handle(CreateCustomerCommand request, CancellationToken cancellationToken)
     {
         // The command is validated in CleanArchitecture.Application.Bus.Behaviors.RequestValidationBehavior.cs
         // https://github.com/jbogard/MediatR/wiki/Behaviors
@@ -22,14 +22,14 @@ public class CreateCustomerCommandHandler: ICommandHandler<CreateCustomerCommand
         var validator = new CreateCustomerCommandValidator();
         if (validator.IsValid(request) == false)
         {
-            return CommandResult<Customer?>.Fail(null, "Erro de validação CreateCustomerCommand");
+            return CommandResult.Fail(validator.GetErrorsMessages());
         }
         
         var customer = new Customer(request.Name, request.Birthdate, request.Address, request.Phone);
 
         customer = await _customerRepository.CreateAsync(customer);
         
-        return CommandResult<Customer?>.Success(customer);
+        return CommandResult.Success(customer);
     }
     
 }
