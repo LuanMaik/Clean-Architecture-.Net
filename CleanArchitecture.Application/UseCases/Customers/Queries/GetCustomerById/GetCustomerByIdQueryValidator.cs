@@ -1,4 +1,4 @@
-﻿using CleanArchitecture.Application.Bus;
+﻿using CleanArchitecture.Application.Bus.Commands;
 using FluentValidation;
 
 namespace CleanArchitecture.Application.UseCases.Customers.Queries.GetCustomerById;

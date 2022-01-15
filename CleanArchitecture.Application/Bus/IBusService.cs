@@ -1,6 +1,6 @@
-﻿using CleanArchitecture.Application.Common;
+﻿using CleanArchitecture.Application.Bus.Commands;
 
-namespace CleanArchitecture.Application.Bus.Interfaces;
+namespace CleanArchitecture.Application.Bus;
 
 public interface IBusService
 {

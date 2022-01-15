@@ -1,40 +1,30 @@
-﻿using CleanArchitecture.Application.Bus;
-using CleanArchitecture.Application.Common;
-using CleanArchitecture.Application.Exceptions;
+﻿using CleanArchitecture.Application.Bus.Commands;
 using CleanArchitecture.Application.Interfaces.Repositories;
 using CleanArchitecture.Domain.Entities;
 
 namespace CleanArchitecture.Application.UseCases.Customers.Queries.GetCustomerById;
 
-public class GetCustomerByIdQueryHandler : ICommandHandler<GetCustomerByIdQuery, CommandResult>
+public class GetCustomerByIdQueryHandler : ICommandHandler<GetCustomerByIdQuery, CommandResult<Customer>>
 {
     private ICustomerRepository _customerRepository;
+    private GetCustomerByIdQueryValidator _validator;
 
-    public GetCustomerByIdQueryHandler(ICustomerRepository customerRepository)
+    public GetCustomerByIdQueryHandler(ICustomerRepository customerRepository, GetCustomerByIdQueryValidator validator)
     {
         _customerRepository = customerRepository;
+        _validator = validator;
     }
 
-    public async Task<CommandResult> Handle(GetCustomerByIdQuery request, CancellationToken cancellationToken)
+    public async Task<CommandResult<Customer>> Handle(GetCustomerByIdQuery request, CancellationToken cancellationToken)
     {
-        // The command is validated in CleanArchitecture.Application.Bus.Behaviors.RequestValidationBehavior.cs
-        // https://github.com/jbogard/MediatR/wiki/Behaviors
-
-        var validator = new GetCustomerByIdQueryValidator();
-        var result = validator.Validate(request);
-        if (result.IsValid == false)
-        {
-            return CommandResult.Fail(validator.GetErrorsMessages());
-        }
-        
+        if (_validator.IsValid(request) == false)
+            return CommandResult<Customer>.Fail(_validator.GetErrorsMessages());
 
         var customer = await _customerRepository.GetByIdAsync(request.IdCustomer);
 
         if (customer == null)
-        {
-            throw new NotFoundException($"Not found Customer with Id {request.IdCustomer}");
-        }
+            return CommandResult<Customer>.Fail($"Not found Customer with Id {request.IdCustomer}");
 
-        return CommandResult.Success(customer);
+        return CommandResult<Customer>.Success(customer);
     }
 }

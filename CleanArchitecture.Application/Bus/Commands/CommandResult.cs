@@ -1,4 +1,4 @@
-﻿namespace CleanArchitecture.Application.Bus;
+﻿namespace CleanArchitecture.Application.Bus.Commands;
 
 public class CommandResult<T> {
     private CommandResult(T data) {
@@ -42,6 +42,13 @@ public class CommandResult<T> {
     {
         var result = new CommandResult<T>();
         result.AddErrors(errors);
+        return result;
+    }
+
+    static internal CommandResult<T> Fail(string error) 
+    {
+        var result = new CommandResult<T>();
+        result.AddError(error);
         return result;
     }
 

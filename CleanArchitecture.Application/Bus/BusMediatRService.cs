@@ -1,5 +1,4 @@
-﻿using CleanArchitecture.Application.Bus.Interfaces;
-using CleanArchitecture.Application.Common;
+﻿using CleanArchitecture.Application.Bus.Commands;
 
 namespace CleanArchitecture.Application.Bus;
 

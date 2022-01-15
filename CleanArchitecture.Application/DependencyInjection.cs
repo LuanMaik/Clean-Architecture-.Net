@@ -1,6 +1,4 @@
 ﻿using CleanArchitecture.Application.Bus;
-using CleanArchitecture.Application.Bus.Behaviors;
-using CleanArchitecture.Application.Bus.Interfaces;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,7 +18,16 @@ public static class DependencyInjection
         // Add FluentValidation validators registrations
         services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
         
-        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
+        // AssemblyScanner
+        //     .FindValidatorsInAssembly(typeof(DependencyInjection).Assembly, true)
+        //     .ForEach(scanResult =>
+        //     {
+        //         services.Add(
+        //             new ServiceDescriptor(
+        //                 serviceType: scanResult.ValidatorType,
+        //                 implementationType: scanResult.ValidatorType,
+        //                 lifetime: ServiceLifetime.Transient));
+        //     });
         
         return services;
     }

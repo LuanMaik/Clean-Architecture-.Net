@@ -1,8 +1,8 @@
 ﻿using CleanArchitecture.Application.Interfaces.CommandQuery;
 
-namespace CleanArchitecture.Application.Common;
+namespace CleanArchitecture.Application.Bus.Commands;
 
 public interface ICommandValidator<T>
 {
-    ICommandQueryValidator<T> GetValidator();
+    ICommandQueryValidator<T> Validator { get; }
 }

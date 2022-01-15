@@ -1,5 +1,4 @@
-﻿using System.Net;
-using CleanArchitecture.WebAPI.Responses;
+﻿using CleanArchitecture.WebAPI.Responses;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CleanArchitecture.WebAPI.Controllers.Abstract;
