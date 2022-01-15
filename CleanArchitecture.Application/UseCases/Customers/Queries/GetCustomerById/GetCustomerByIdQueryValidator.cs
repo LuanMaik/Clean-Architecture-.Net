@@ -1,8 +1,9 @@
-﻿using FluentValidation;
+﻿using CleanArchitecture.Application.Bus;
+using FluentValidation;
 
 namespace CleanArchitecture.Application.UseCases.Customers.Queries.GetCustomerById;
 
-public class GetCustomerByIdQueryValidator : AbstractValidator<GetCustomerByIdQuery>
+public class GetCustomerByIdQueryValidator : BaseCommandQueryValidator<GetCustomerByIdQuery>
 {
     public GetCustomerByIdQueryValidator()
     {

@@ -1,4 +1,7 @@
-﻿using CleanArchitecture.Application.Bus.Interfaces;
+﻿using System.Text;
+using CleanArchitecture.Application.Bus;
+using CleanArchitecture.Application.Common;
+using CleanArchitecture.Application.Interfaces.CommandQuery;
 using CleanArchitecture.Domain.Entities;
 using CleanArchitecture.Domain.ValueObjects;
 
@@ -6,25 +9,24 @@ namespace CleanArchitecture.Application.UseCases.Customers.Commands.CreateCustom
 
 // Other approach it's you to define this class inside CreateCustomerCommandHandler.cs file, to get easier to discover where is the Command Handler
 
-public record CreateCustomerCommand(string Name, DateTime Birthdate, Address Address, Phone Phone):IRequest<Customer>
+public record CreateCustomerCommand(string Name, DateTime Birthdate, Address Address, Phone Phone): ICommand<CommandResult<Customer?>>, ICommandValidator<CreateCustomerCommand>
 {
-    protected string[] ErrorsMessages;
-        
-    public bool Validate()
-    {
-        var validator = new CreateCustomerCommandValidator();
-        var result = validator.Validate(this);
-        
-        if (result.IsValid == false)
-        {
-            ErrorsMessages = result.Errors.Select(e => e.ErrorMessage).ToArray();
-        }
+    protected ICommandQueryValidator<CreateCustomerCommand> Validator;
 
-        return result.IsValid;
+    public bool IsValid()
+    {
+        Validator = GetValidator();
+        return Validator.IsValid(this);
     }
 
-    public string[] GetErrorsMessages()
+    public IList<string> GetErrors()
     {
-        return ErrorsMessages;
+        return Validator.GetErrorsMessages();
+    }
+
+
+    public ICommandQueryValidator<CreateCustomerCommand> GetValidator()
+    {
+        return new CreateCustomerCommandValidator();
     }
 }

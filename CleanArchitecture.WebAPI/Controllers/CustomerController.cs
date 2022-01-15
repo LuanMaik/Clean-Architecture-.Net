@@ -1,3 +1,4 @@
+using CleanArchitecture.Application.Bus;
 using CleanArchitecture.Application.Exceptions;
 using CleanArchitecture.Application.Bus.Interfaces;
 using CleanArchitecture.Application.UseCases.Customers.Commands.CreateCustomer;
@@ -37,12 +38,10 @@ public class CustomerController : ApiController
     {
         try
         {
-            Customer result = await _busService.SendCommand(command);
-            return SuccessResponse(result);
-        }
-        catch (ValidationException ex)
-        {
-            return ValidationErrorResponse(ex.GetErrorsMessages());
+            var result = await _busService.SendCommand(command);
+            return result.IsSuccess 
+                ? SuccessResponse(result.Data()) 
+                : ValidationErrorResponse(result.Errors);
         }
         catch (Exception ex)
         {
@@ -66,8 +65,11 @@ public class CustomerController : ApiController
     {
         try
         {
-            Customer result = await _busService.SendCommand(new GetCustomerByIdQuery(id));
-            return SuccessResponse(result);
+            CommandResult<Customer?> result = await _busService.SendCommand(new GetCustomerByIdQuery(id));
+            
+            return result.IsSuccess 
+                ? SuccessResponse(result.Data()) 
+                : ValidationErrorResponse(result.Errors);
         }
         catch (ValidationException ex)
         {
@@ -95,8 +97,10 @@ public class CustomerController : ApiController
     {
         try
         {
-            bool result = await _busService.SendCommand(new InactivateCustomerCommand(id));
-            return SuccessResponse(result);
+            CommandResult<bool> result = await _busService.SendCommand(new InactivateCustomerCommand(id));
+            return result.IsSuccess 
+                ? SuccessResponse(result.Data()) 
+                : ValidationErrorResponse(result.Errors);
         }
         catch (ValidationException ex)
         {

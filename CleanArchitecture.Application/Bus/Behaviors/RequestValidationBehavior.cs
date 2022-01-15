@@ -1,37 +1,38 @@
-﻿using FluentValidation;
-using FluentValidation.Results;
+﻿using CleanArchitecture.Application.Interfaces.CommandQuery;
+using FluentValidation;
 using MediatR;
 using ValidationException = CleanArchitecture.Application.Exceptions.ValidationException;
 
 namespace CleanArchitecture.Application.Bus.Behaviors;
 
-public class RequestValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : IRequest<TResponse>
+public class RequestValidationBehavior<TRequest, TResponse> : MediatR.IPipelineBehavior<TRequest, TResponse> where TRequest : Interfaces.IRequest<TResponse>
 {
-    private readonly IEnumerable<IValidator<TRequest>> _validators;
+    private readonly ICommandQueryValidator<TRequest> _validator;
 
-    public RequestValidationBehavior(IEnumerable<IValidator<TRequest>> validators)
+    public RequestValidationBehavior(IValidator<TRequest> validator)
     {
-        _validators = validators;
+        // Check if validator was found
+        if (validator is null)
+        {
+            throw new NotImplementedException($"{typeof(TRequest)} there is no validator implemented. Create it!");
+        }
+
+        // Check if validator implements ICommandQueryValidator interface
+        if (validator is ICommandQueryValidator<TRequest> commandQueryValidator)
+        {
+            _validator = commandQueryValidator;
+        }
+        
+        throw new NotImplementedException($"{typeof(TRequest)} validator needs to implement {typeof(ICommandQueryValidator<TRequest>)}.");
     }
 
     public Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
     {
-        var errorsMessages = new List<string>();
-        
-        var context = new ValidationContext<TRequest>(request);
-        
-        foreach (var validator in _validators)
-        {
-            List<ValidationFailure> errors = validator.Validate(context).Errors;
-            
-            foreach (ValidationFailure error in errors)
-                errorsMessages.Add(error.ErrorMessage);
-        }
+        if (_validator.IsValid(request) == false)
+            return CommandResult<TResponse>.Fail(null, _validator.GetErrorsMessages());
 
-        if (errorsMessages.Count != 0)
-        {
-            throw new ValidationException(errorsMessages);
-        }
+
+        //throw new ValidationException(_validator.GetErrorsMessages());
 
         return next();
     }

@@ -1,11 +1,12 @@
-﻿using CleanArchitecture.Application.Bus.Interfaces;
+﻿using CleanArchitecture.Application.Bus;
+using CleanArchitecture.Application.Common;
 using CleanArchitecture.Application.Exceptions;
 using CleanArchitecture.Application.Interfaces.Repositories;
 using CleanArchitecture.Domain.Entities;
 
 namespace CleanArchitecture.Application.UseCases.Customers.Queries.GetCustomerById;
 
-public class GetCustomerByIdQueryHandler : IRequestHandler<GetCustomerByIdQuery, Customer>
+public class GetCustomerByIdQueryHandler : ICommandHandler<GetCustomerByIdQuery, CommandResult<Customer?>>
 {
     private ICustomerRepository _customerRepository;
 
@@ -14,10 +15,18 @@ public class GetCustomerByIdQueryHandler : IRequestHandler<GetCustomerByIdQuery,
         _customerRepository = customerRepository;
     }
 
-    public async Task<Customer> Handle(GetCustomerByIdQuery request, CancellationToken cancellationToken)
+    public async Task<CommandResult<Customer?>> Handle(GetCustomerByIdQuery request, CancellationToken cancellationToken)
     {
         // The command is validated in CleanArchitecture.Application.Bus.Behaviors.RequestValidationBehavior.cs
         // https://github.com/jbogard/MediatR/wiki/Behaviors
+
+        var validator = new GetCustomerByIdQueryValidator();
+        var result = validator.Validate(request);
+        if (result.IsValid == false)
+        {
+            return CommandResult<Customer?>.Fail(null, validator.GetErrorsMessages());
+        }
+        
 
         var customer = await _customerRepository.GetByIdAsync(request.IdCustomer);
 
@@ -26,6 +35,6 @@ public class GetCustomerByIdQueryHandler : IRequestHandler<GetCustomerByIdQuery,
             throw new NotFoundException($"Not found Customer with Id {request.IdCustomer}");
         }
 
-        return customer;
+        return CommandResult<Customer?>.Success(customer);
     }
 }

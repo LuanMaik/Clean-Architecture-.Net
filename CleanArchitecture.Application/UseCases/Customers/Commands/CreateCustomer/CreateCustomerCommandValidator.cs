@@ -1,12 +1,13 @@
-﻿using FluentValidation;
+﻿using CleanArchitecture.Application.Bus;
+using FluentValidation;
 
 namespace CleanArchitecture.Application.UseCases.Customers.Commands.CreateCustomer;
 
-public class CreateCustomerCommandValidator : AbstractValidator<CreateCustomerCommand>
+public class CreateCustomerCommandValidator : BaseCommandQueryValidator<CreateCustomerCommand>
 {
     private const int MaxExpectedLifeTime = 120;
     private const int MinAgeCustomer = 18;
-        
+
     public CreateCustomerCommandValidator()
     {
         RuleFor(x => x.Name).MaximumLength(100).NotEmpty();
@@ -24,4 +25,6 @@ public class CreateCustomerCommandValidator : AbstractValidator<CreateCustomerCo
         RuleFor(x => x.Phone.RegionCode).MaximumLength(5).NotEmpty();
         RuleFor(x => x.Phone.Number).MaximumLength(15).NotEmpty();
     }
+
+    
 }

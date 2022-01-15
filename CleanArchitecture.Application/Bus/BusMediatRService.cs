@@ -1,4 +1,5 @@
 ﻿using CleanArchitecture.Application.Bus.Interfaces;
+using CleanArchitecture.Application.Common;
 
 namespace CleanArchitecture.Application.Bus;
 
@@ -14,7 +15,7 @@ public class BusMediatorService: IBusService
         _mediator = mediator;
     }
 
-    public async Task<TResponse> SendCommand<TResponse>(IRequest<TResponse> command, CancellationToken cancellationToken = default)
+    public async Task<TResponse> SendCommand<TResponse>(ICommand<TResponse> command, CancellationToken cancellationToken = default)
     {
         return await _mediator.Send<TResponse>(command, cancellationToken);
     }
