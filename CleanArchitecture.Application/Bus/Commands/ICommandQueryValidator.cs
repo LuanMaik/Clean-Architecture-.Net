@@ -1,4 +1,4 @@
-﻿namespace CleanArchitecture.Application.Interfaces.CommandQuery;
+﻿namespace CleanArchitecture.Application.Bus.Commands;
 
 public interface ICommandQueryValidator<T>
 {

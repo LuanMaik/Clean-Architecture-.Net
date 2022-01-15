@@ -1,5 +1,5 @@
 ﻿using CleanArchitecture.Application.Bus.Commands;
-using CleanArchitecture.Application.Interfaces.Repositories;
+using CleanArchitecture.Application.Repositories;
 using CleanArchitecture.Domain.Entities;
 
 namespace CleanArchitecture.Application.UseCases.Customers.Commands.CreateCustomer;

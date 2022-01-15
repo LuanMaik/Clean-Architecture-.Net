@@ -1,6 +1,4 @@
-﻿using CleanArchitecture.Application.Interfaces.CommandQuery;
-
-namespace CleanArchitecture.Application.Bus.Commands;
+﻿namespace CleanArchitecture.Application.Bus.Commands;
 
 public interface ICommandValidator<T>
 {

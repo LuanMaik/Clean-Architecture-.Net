@@ -1,4 +1,4 @@
-﻿using CleanArchitecture.Application.Interfaces.Repositories;
+﻿using CleanArchitecture.Application.Repositories;
 using CleanArchitecture.Infrastructure.Data.EntityFrameworkCore.Repositories;
 using Microsoft.Extensions.DependencyInjection;
 
