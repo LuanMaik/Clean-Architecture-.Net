@@ -1,43 +1,17 @@
-﻿using System.ComponentModel;
+﻿namespace CleanArchitecture.WebAPI.Responses;
 
-namespace CleanArchitecture.WebAPI.Responses;
-
-public record ErrorResponse: IApiResponse
+public record ErrorResponse
 {
-    [DefaultValue(false)]
-    public bool Success { get; private set; } = false;
-    
-    
-    
-    [DefaultValue("Eg: Error description")]
     public string Message { get; private set; }
-    
-    
-    
-    [DefaultValue(new string[2]{"Eg: First error description", "Eg: Second error description"})]
-    public IEnumerable<string> Errors { get; private set; }
-    
-    
-
-    public ErrorResponse(string message, IEnumerable<string> errors)
-    {
-        Message = message;
-        Errors = errors;
-    }
+    public IList<string> Errors { get; private set; } = Array.Empty<string>();
 
     public ErrorResponse(string message)
     {
         Message = message;
-        Errors = new string[0];
     }
-
-    public bool IsSuccess()
+    public ErrorResponse(string message, IList<string> errors)
     {
-        return Success;
-    }
-
-    public string GetMessage()
-    {
-        return Message;
+        Message = message;
+        Errors = errors;
     }
 };
